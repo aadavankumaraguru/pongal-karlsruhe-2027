@@ -171,7 +171,7 @@ function initCalendarGenerator() {
 
   const eventDetails = {
     title: '🌟 Tamil Pongal Celebration 2027 | Karlsruhe Tamil Sangam',
-    description: 'Vanakkam Makkale! Join us for a grand Pongal celebration starting with an auspicious puja seeking blessings from God, followed by cultural dance & music, games for kids & families, and an authentic traditional feast! Organized with love by Karlsruhe Tamil Sangam.\n\nNote: Exact timings will be confirmed soon.\n\nEvent & Registration: Beethovenstraße 4, 76448 Durmersheim-Würmersheim',
+    description: 'Vanakkam Makkale! Join us for a grand Pongal celebration starting with auspicious lamp lighting & Iraivanakkam prayer, followed by cultural dance & music, games for kids & families, and an authentic traditional feast! Organized with love by Karlsruhe Tamil Sangam.\n\nNote: Exact timings will be confirmed soon.\n\nEvent & Registration: Beethovenstraße 4, 76448 Durmersheim-Würmersheim',
     location: 'Beethovenstraße 4, 76448 Durmersheim-Würmersheim, Germany',
     startISO: '20270206',
     endISO: '20270207'
