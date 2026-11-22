@@ -6,18 +6,18 @@
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
   initPetalsCanvas();
-  initFestiveAudio();
   initMobileMenu();
   initCalendarGenerator();
   initFaqAccordion();
   initSmoothScroll();
+  initInteractivePot();
+  initRegistrationForm();
 });
 
 /* -------------------------------------------------------------
  * 1. COUNTDOWN TIMER TO FEB 06, 2027 (10:00 AM CET)
  * ----------------------------------------------------------- */
 function initCountdown() {
-  // February 6, 2027, 10:00:00 CET
   const targetDate = new Date('2027-02-06T10:00:00+01:00').getTime();
 
   const daysEl = document.getElementById('count-days');
@@ -59,187 +59,111 @@ function initCountdown() {
 /* -------------------------------------------------------------
  * 2. FLOATING MARIGOLD & JASMINE PETALS (HTML5 CANVAS)
  * ----------------------------------------------------------- */
-let petalsActive = true;
 function initPetalsCanvas() {
   const canvas = document.getElementById('petals-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
+  let animationFrameId;
+  let petalsRunning = true;
 
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
 
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
-
-  const petalsCount = Math.min(30, Math.floor(width / 35));
+  const petalCount = window.innerWidth < 768 ? 20 : 38;
   const petals = [];
 
-  const petalColors = [
-    { fill: '#f59e0b', stroke: '#d97706', type: 'marigold-orange' },
-    { fill: '#fbbf24', stroke: '#d97706', type: 'marigold-yellow' },
-    { fill: '#fef08a', stroke: '#facc15', type: 'jasmine-gold' },
-    { fill: '#ffffff', stroke: '#fef9c3', type: 'jasmine-white' }
+  const petalTypes = [
+    { color: '#f59e0b', stroke: '#d97706', type: 'marigold' },
+    { color: '#fde047', stroke: '#eab308', type: 'yellow' },
+    { color: '#fffbeb', stroke: '#fef08a', type: 'jasmine' },
+    { color: '#ea580c', stroke: '#c2410c', type: 'orange' }
   ];
 
-  for (let i = 0; i < petalsCount; i++) {
-    petals.push(createPetal(width, height, petalColors, true));
+  for (let i = 0; i < petalCount; i++) {
+    const pType = petalTypes[Math.floor(Math.random() * petalTypes.length)];
+    petals.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      radius: Math.random() * 5 + 4,
+      d: Math.random() * petalCount,
+      color: pType.color,
+      stroke: pType.stroke,
+      tilt: Math.random() * 10 - 10,
+      tiltAngleInc: Math.random() * 0.07 + 0.02,
+      tiltAngle: 0,
+      opacity: Math.random() * 0.5 + 0.4
+    });
   }
 
-  function createPetal(w, h, colors, randomY = false) {
-    const colorObj = colors[Math.floor(Math.random() * colors.length)];
-    return {
-      x: Math.random() * w,
-      y: randomY ? Math.random() * h : -20,
-      size: Math.random() * 8 + 6,
-      speedY: Math.random() * 1.2 + 0.6,
-      speedX: (Math.random() - 0.5) * 0.8,
-      rotation: Math.random() * 360,
-      rotationSpeed: (Math.random() - 0.5) * 1.5,
-      oscillation: Math.random() * 2,
-      oscillationSpeed: Math.random() * 0.02 + 0.01,
-      color: colorObj
-    };
-  }
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  function render() {
-    ctx.clearRect(0, 0, width, height);
+    for (let i = 0; i < petals.length; i++) {
+      const p = petals[i];
+      ctx.beginPath();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = p.stroke;
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.opacity;
 
-    if (petalsActive) {
-      petals.forEach((p) => {
-        p.y += p.speedY;
-        p.x += Math.sin(p.oscillation) * 0.8 + p.speedX;
-        p.oscillation += p.oscillationSpeed;
-        p.rotation += p.rotationSpeed;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.tiltAngle);
 
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate((p.rotation * Math.PI) / 180);
-
-        ctx.fillStyle = p.color.fill;
-        ctx.strokeStyle = p.color.stroke;
-        ctx.lineWidth = 0.5;
-
-        // Draw tear-drop shaped petal
-        ctx.beginPath();
-        ctx.moveTo(0, -p.size);
-        ctx.bezierCurveTo(p.size * 0.8, -p.size * 0.4, p.size * 0.6, p.size * 0.6, 0, p.size);
-        ctx.bezierCurveTo(-p.size * 0.6, p.size * 0.6, -p.size * 0.8, -p.size * 0.4, 0, -p.size);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.restore();
-
-        // Recycle petal
-        if (p.y > height + 25 || p.x < -30 || p.x > width + 30) {
-          p.y = -20;
-          p.x = Math.random() * width;
-        }
-      });
+      ctx.ellipse(0, 0, p.radius, p.radius * 1.6, 0, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
     }
-
-    requestAnimationFrame(render);
   }
 
-  render();
+  function update() {
+    for (let i = 0; i < petals.length; i++) {
+      const p = petals[i];
+      p.tiltAngle += p.tiltAngleInc;
+      p.y += (Math.cos(p.d) + 1.2 + p.radius / 3.5) * 0.8;
+      p.x += Math.sin(p.d) * 0.9;
 
-  // Toggle button setup
+      if (p.y > canvas.height) {
+        petals[i].x = Math.random() * canvas.width;
+        petals[i].y = -20;
+      }
+    }
+  }
+
+  function loop() {
+    if (!petalsRunning) return;
+    draw();
+    update();
+    animationFrameId = requestAnimationFrame(loop);
+  }
+
+  loop();
+
   const toggleBtn = document.getElementById('toggle-petals');
   if (toggleBtn) {
     toggleBtn.addEventListener('click', () => {
-      petalsActive = !petalsActive;
-      toggleBtn.classList.toggle('opacity-50', !petalsActive);
-      toggleBtn.setAttribute('title', petalsActive ? 'Pause falling petals' : 'Play falling petals');
-      showToast(petalsActive ? '🌸 Flower shower enabled' : '🌸 Flower shower paused');
+      petalsRunning = !petalsRunning;
+      if (petalsRunning) {
+        toggleBtn.innerText = '🌸';
+        toggleBtn.setAttribute('title', 'Pause Flower Shower');
+        loop();
+      } else {
+        toggleBtn.innerText = '🚫';
+        toggleBtn.setAttribute('title', 'Resume Flower Shower');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        cancelAnimationFrame(animationFrameId);
+      }
     });
   }
 }
 
 /* -------------------------------------------------------------
- * 3. FESTIVE WEB-AUDIO HARMONY (NADASWARAM / BELL CHIMES)
- * ----------------------------------------------------------- */
-function initFestiveAudio() {
-  let audioCtx = null;
-  let isPlaying = false;
-  let melodyInterval = null;
-
-  const audioBtn = document.getElementById('toggle-audio');
-  if (!audioBtn) return;
-
-  // Traditional pentatonic festive scale (Raga Mohanam: C4, D4, E4, G4, A4, C5)
-  // Sa, Ri2, Ga3, Pa, Dha2, Sa'
-  const mohanamFreqs = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 659.25];
-
-  function playBellNote(freq, time, duration = 1.2, volume = 0.08) {
-    if (!audioCtx) return;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    // Harmonics for bell/shehnai resonance
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(freq, time);
-
-    gain.gain.setValueAtTime(0.001, time);
-    gain.gain.exponentialRampToValueAtTime(volume, time + 0.04);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(time);
-    osc.stop(time + duration);
-  }
-
-  function playFestivePhrase() {
-    if (!audioCtx || !isPlaying) return;
-    const now = audioCtx.currentTime;
-
-    // A cheerful traditional auspicious sequence
-    const sequence = [
-      { f: mohanamFreqs[0], d: 0.0 },
-      { f: mohanamFreqs[1], d: 0.3 },
-      { f: mohanamFreqs[2], d: 0.6 },
-      { f: mohanamFreqs[3], d: 0.9 },
-      { f: mohanamFreqs[4], d: 1.2 },
-      { f: mohanamFreqs[5], d: 1.5 }
-    ];
-
-    sequence.forEach((note) => {
-      playBellNote(note.f, now + note.d, 1.0, 0.05);
-    });
-  }
-
-  audioBtn.addEventListener('click', () => {
-    if (!audioCtx) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      audioCtx = new AudioContext();
-    }
-
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-
-    isPlaying = !isPlaying;
-
-    if (isPlaying) {
-      audioBtn.classList.add('bg-amber-500', 'text-amber-950');
-      audioBtn.classList.remove('bg-amber-950/80', 'text-amber-300');
-      document.getElementById('audio-icon-path').setAttribute('d', 'M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z');
-      playFestivePhrase();
-      melodyInterval = setInterval(playFestivePhrase, 4500);
-      showToast('🪕 Traditional festive chime playing');
-    } else {
-      audioBtn.classList.remove('bg-amber-500', 'text-amber-950');
-      audioBtn.classList.add('bg-amber-950/80', 'text-amber-300');
-      if (melodyInterval) clearInterval(melodyInterval);
-      showToast('🔇 Festive chime paused');
-    }
-  });
-}
-
-/* -------------------------------------------------------------
- * 4. CALENDAR EXPORT (GOOGLE CALENDAR & ICAL / .ICS DOWNLOAD)
+ * 3. CALENDAR EXPORT (GOOGLE CALENDAR & ICAL / .ICS DOWNLOAD)
  * ----------------------------------------------------------- */
 function initCalendarGenerator() {
   const gCalBtn = document.getElementById('add-to-gcal');
@@ -247,10 +171,10 @@ function initCalendarGenerator() {
 
   const eventDetails = {
     title: '🌟 Tamil Pongal Celebration 2027 | Karlsruhe Tamil Sangam',
-    description: 'Vanakkam Makkale! Join us for a grand Pongal celebration filled with traditional Pongal cooking, cultural dance, Kolam competition, games, and a festive traditional feast on banana leaf! Organized with love by Karlsruhe Tamil Sangam.\n\nSpreadsheet Registration & Volunteer Link: https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing',
+    description: 'Vanakkam Makkale! Join us for a grand Pongal celebration filled with traditional Pongal cooking & puja, cultural dance & music, games for kids & families, and an authentic traditional feast! Organized with love by Karlsruhe Tamil Sangam.\n\nNote: Exact timings will be confirmed soon.\n\nRegistration Link: https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing',
     location: 'Beethovenstraße 4, 76448 Durmersheim-Würmersheim, Germany',
-    startISO: '20270206T090000Z', // 10:00 CET = 09:00 UTC
-    endISO: '20270206T170000Z'    // 18:00 CET = 17:00 UTC
+    startISO: '20270206',
+    endISO: '20270207'
   };
 
   if (gCalBtn) {
@@ -284,29 +208,27 @@ function initCalendarGenerator() {
       const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
-      link.setAttribute('download', 'Tamil_Pongal_2027_Karlsruhe.ics');
+      link.setAttribute('download', 'Tamil_Pongal_Karlsruhe_2027.ics');
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      showToast('📅 Calendar invite (.ics) downloaded!');
     });
   }
 }
 
 /* -------------------------------------------------------------
- * 5. FAQ ACCORDION
+ * 4. FAQ ACCORDION
  * ----------------------------------------------------------- */
 function initFaqAccordion() {
-  const faqButtons = document.querySelectorAll('.faq-toggle');
+  const toggles = document.querySelectorAll('.faq-toggle');
 
-  faqButtons.forEach((btn) => {
+  toggles.forEach((btn) => {
     btn.addEventListener('click', () => {
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
       const content = btn.nextElementSibling;
       const icon = btn.querySelector('.faq-icon');
-      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
 
-      // Close other accordions
-      faqButtons.forEach((otherBtn) => {
+      toggles.forEach((otherBtn) => {
         if (otherBtn !== btn) {
           otherBtn.setAttribute('aria-expanded', 'false');
           if (otherBtn.nextElementSibling) {
@@ -317,7 +239,6 @@ function initFaqAccordion() {
         }
       });
 
-      // Toggle clicked
       btn.setAttribute('aria-expanded', !isExpanded);
       if (content) {
         content.classList.toggle('hidden', isExpanded);
@@ -330,15 +251,15 @@ function initFaqAccordion() {
 }
 
 /* -------------------------------------------------------------
- * 6. MOBILE MENU
+ * 5. MOBILE NAVIGATION MENU
  * ----------------------------------------------------------- */
 function initMobileMenu() {
-  const toggleBtn = document.getElementById('mobile-menu-btn');
-  const menu = document.getElementById('mobile-menu');
+  const menuBtn = document.getElementById('mobile-menu-btn');
   const closeBtn = document.getElementById('mobile-menu-close');
+  const menu = document.getElementById('mobile-menu');
   const navLinks = document.querySelectorAll('.mobile-nav-link');
 
-  if (!toggleBtn || !menu) return;
+  if (!menuBtn || !menu) return;
 
   function openMenu() {
     menu.classList.remove('hidden');
@@ -350,7 +271,7 @@ function initMobileMenu() {
     document.body.style.overflow = '';
   }
 
-  toggleBtn.addEventListener('click', openMenu);
+  menuBtn.addEventListener('click', openMenu);
   if (closeBtn) closeBtn.addEventListener('click', closeMenu);
 
   navLinks.forEach((link) => {
@@ -359,59 +280,7 @@ function initMobileMenu() {
 }
 
 /* -------------------------------------------------------------
- * 7. TOAST NOTIFICATION & SHARE
- * ----------------------------------------------------------- */
-window.showToast = function (message) {
-  let toast = document.getElementById('toast-notification');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'toast-notification';
-    toast.className = 'fixed bottom-6 right-6 z-50 bg-amber-500 text-amber-950 font-semibold px-5 py-3 rounded-xl shadow-2xl transition-all duration-300 transform translate-y-12 opacity-0 flex items-center gap-2 border border-amber-300';
-    document.body.appendChild(toast);
-  }
-
-  toast.innerHTML = message;
-  toast.classList.remove('translate-y-12', 'opacity-0');
-  toast.classList.add('translate-y-0', 'opacity-100');
-
-  clearTimeout(toast.timeout);
-  toast.timeout = setTimeout(() => {
-    toast.classList.add('translate-y-12', 'opacity-0');
-    toast.classList.remove('translate-y-0', 'opacity-100');
-  }, 3200);
-};
-
-window.copyEventLink = function () {
-  const shareData = {
-    title: '🌟 Pongal 2027 in Karlsruhe',
-    text: '🌾 Vanakkam Makkale! Let’s celebrate Pongal 2027 together with Karlsruhe Tamil Sangam on Saturday, 06 February 2027 at Beethovenstraße 4, 76448 Durmersheim-Würmersheim. Register & volunteer here:',
-    url: 'https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing'
-  };
-
-  if (navigator.share) {
-    navigator.share(shareData).catch(() => {});
-  } else {
-    navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`).then(() => {
-      showToast('📋 Event info & Spreadsheet link copied to clipboard!');
-    });
-  }
-};
-
-window.shareWhatsApp = function () {
-  const text = encodeURIComponent(
-    '🌟 *PONGAL 2027 CELEBRATION* 🌟\n' +
-    '🙏 *Vanakkam Makkale!* 🙏\n' +
-    'Get ready for Pongal celebration! 🌾🎉 Let’s come together with family and friends to celebrate our traditions. ❤️\n\n' +
-    '📅 *Date:* Saturday, 06 February 2027\n' +
-    '📍 *Venue:* Beethovenstraße 4, 76448 Durmersheim-Würmersheim\n' +
-    '📝 *Register & Volunteer:* https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing\n\n' +
-    'அன்புடன்,\n*Karlsruhe Tamil Sangam*'
-  );
-  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
-};
-
-/* -------------------------------------------------------------
- * 8. SMOOTH SCROLL FOR IN-PAGE ANCHORS
+ * 6. SMOOTH SCROLLING FOR ALL ANCHORS
  * ----------------------------------------------------------- */
 function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -428,6 +297,53 @@ function initSmoothScroll() {
       }
     });
   });
+}
+
+/* -------------------------------------------------------------
+ * 7. SHARE & COPY EVENT FUNCTIONS
+ * ----------------------------------------------------------- */
+window.shareWhatsApp = function () {
+  const message = '🌾 Vanakkam Makkale! Pongal 2027 Celebration in Karlsruhe Region! 🌾\n\n' +
+    '📅 Date: Saturday, 06 February 2027\n' +
+    '📍 Venue: Beethovenstraße 4, 76448 Durmersheim-Würmersheim\n' +
+    '📝 Register & Volunteer Online: ' + window.location.href + '#register-form-section\n\n' +
+    'Karlsruhe Tamil Sangam';
+  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
+};
+
+window.copyEventLink = function () {
+  const text = '🌟 Tamil Pongal 2027 - Karlsruhe Tamil Sangam\n' +
+    '📅 Saturday, 06 February 2027\n' +
+    '📍 Beethovenstraße 4, 76448 Durmersheim-Würmersheim\n' +
+    '📝 Register Online: ' + window.location.href + '#register-form-section';
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('✅ Event info & link copied to clipboard!');
+  }).catch(() => {
+    showToast('Link: ' + window.location.href);
+  });
+};
+
+/* -------------------------------------------------------------
+ * 8. CUSTOM TOAST NOTIFICATIONS
+ * ----------------------------------------------------------- */
+function showToast(message) {
+  let toast = document.getElementById('festive-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'festive-toast';
+    toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-maroon-950/95 text-amber-200 border-2 border-amber-400 px-6 py-3 rounded-2xl shadow-2xl text-xs sm:text-sm font-bold transition-all duration-300 opacity-0 pointer-events-none text-center max-w-sm';
+    document.body.appendChild(toast);
+  }
+
+  toast.innerHTML = message;
+  toast.classList.remove('opacity-0', 'pointer-events-none');
+  toast.classList.add('opacity-100');
+
+  setTimeout(() => {
+    toast.classList.remove('opacity-100');
+    toast.classList.add('opacity-0', 'pointer-events-none');
+  }, 4000);
 }
 
 /* -------------------------------------------------------------
@@ -449,4 +365,110 @@ window.closeSpreadsheetModal = function () {
   if (!modal) return;
   modal.classList.add('hidden');
   document.body.style.overflow = '';
+};
+
+/* -------------------------------------------------------------
+ * 10. INTERACTIVE PONGAL POT ANIMATION CLICK
+ * ----------------------------------------------------------- */
+function initInteractivePot() {
+  const pot = document.getElementById('pongal-hero-interactive');
+  if (!pot) return;
+
+  pot.addEventListener('click', () => {
+    showToast('🌾 பொங்கலோ பொங்கல்! பால் பொங்கி வரட்டும், வாழ்வு செழிக்கட்டும்! 🌾');
+    pot.classList.add('scale-105');
+    setTimeout(() => {
+      pot.classList.remove('scale-105');
+    }, 350);
+  });
+}
+
+/* -------------------------------------------------------------
+ * 11. ONLINE REGISTRATION & VOLUNTEER FORM HANDLER
+ * ----------------------------------------------------------- */
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyDjeJcuFze4WLNNCCoQ1JuGhX2AmJuJLzsIDfoAXiWEs8E5quwj_QUKbIRE8o8AiDx/exec';
+
+function initRegistrationForm() {
+  const form = document.getElementById('pongal-registration-form');
+  if (!form) return;
+
+  const submitBtn = document.getElementById('form-submit-btn');
+  const btnIcon = document.getElementById('btn-icon');
+  const btnText = document.getElementById('btn-text');
+  const btnSpinner = document.getElementById('btn-spinner');
+  const successBanner = document.getElementById('form-success-banner');
+  const errorBanner = document.getElementById('form-error-banner');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const checkedTeams = [];
+    document.querySelectorAll('input[name="volunteer-team"]:checked').forEach((cb) => {
+      checkedTeams.push(cb.value);
+    });
+
+    const formData = {
+      participants: document.getElementById('form-participants')?.value?.trim() || '',
+      adults: document.getElementById('form-adults')?.value || '1',
+      kidsUnder5: document.getElementById('form-kids-under5')?.value || '0',
+      kids5to15: document.getElementById('form-kids-5to15')?.value || '0',
+      kidsNamesAges: document.getElementById('form-kids-names')?.value?.trim() || '',
+      isStudent: document.getElementById('form-student')?.value || 'No',
+      contactNumber: document.getElementById('form-contact')?.value?.trim() || '',
+      volunteerTeams: checkedTeams.join(', ')
+    };
+
+    if (submitBtn) submitBtn.disabled = true;
+    if (btnIcon) btnIcon.classList.add('hidden');
+    if (btnSpinner) btnSpinner.classList.remove('hidden');
+    if (btnText) btnText.textContent = 'Saving to Sheet... • பதிவு செய்யப்படுகிறது...';
+    if (errorBanner) errorBanner.classList.add('hidden');
+
+    try {
+      // Send single clean URL-encoded POST request
+      const params = new URLSearchParams();
+      for (const key in formData) {
+        params.append(key, formData[key]);
+      }
+
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: params.toString()
+      });
+
+      if (successBanner) {
+        successBanner.classList.remove('hidden');
+        successBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      form.classList.add('hidden');
+      showToast('🎉 உங்கள் பதிவு வெற்றிகரமாக சேர்க்கப்பட்டது! (Registration Saved)');
+    } catch (err) {
+      console.error('Registration submit error:', err);
+      if (errorBanner) {
+        errorBanner.classList.remove('hidden');
+      }
+      showToast('⚠️ Registration failed. Please check internet or try again.');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+      if (btnIcon) btnIcon.classList.remove('hidden');
+      if (btnSpinner) btnSpinner.classList.add('hidden');
+      if (btnText) btnText.textContent = 'Submit Registration • பதிவு செய்க';
+    }
+  });
+}
+
+window.resetPongalForm = function() {
+  const form = document.getElementById('pongal-registration-form');
+  const successBanner = document.getElementById('form-success-banner');
+  const errorBanner = document.getElementById('form-error-banner');
+  if (form) {
+    form.reset();
+    form.classList.remove('hidden');
+  }
+  if (successBanner) successBanner.classList.add('hidden');
+  if (errorBanner) errorBanner.classList.add('hidden');
 };

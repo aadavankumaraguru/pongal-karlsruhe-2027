@@ -19,11 +19,27 @@ A festive, traditional, and modern responsive website crafted for the **Tamil Po
 ## 🎨 Design & Cultural Highlights
 
 1. **Authentic Festive Aesthetics:**
-   - Deep temple maroon (`#3d050d` / `#5c0b16`), radiant turmeric & gold gradients (`#f59e0b` / `#fde047`), and festive banana leaf green (`#14532d`).
+   - **KTS Pongal Emblem:** Traditional Pongal Pot vector symbol in the header logo.
+   - **Realistic Overflowing Pongal Pot (பொங்கலோ பொங்கல்!):** 3D-shaded terracotta earthen pot with active cascading sweet milk and jaggery foam flowing down the belly in organic streams, tied with holy Kaapu thread and fresh turmeric leaves, flanked by dark purple sugarcanes and glowing hearth fire with embers.
+   - Deep temple maroon (`#3d050d`), radiant turmeric & gold gradients (`#f59e0b` / `#fde047`), and festive emerald leaf accents.
    - Hanging Mango Leaf Toran (மா இலை தோரணம் / Mavilai Thoranam) across the top.
    - Traditional Kolam (புள்ளி கோலம்) geometric vector background and dividers.
-   - Hand-crafted scalable vector illustration of the **Earthen Pongal Pot (மண் பானை)** with decorative yellow turmeric root garland (மஞ்சள் கொத்து), boiling sweet rice with rising steam particles, wood hearth flame, and tall purple sugarcane stalks (கரும்பு).
    - Sun God (Surya Bhagavan) radiant ray aura.
+
+2. **Event & Volunteer Organization:**
+   - **Program Highlights (Schedule Coming Soon):**
+     1. Pongal Cooking & Puja (பொங்கல் வைத்தல் & பூஜை வழிபாடு)
+     2. Grand Tamil Virundhu (பாரம்பரிய அறுசுவை விருந்து)
+     3. Cultural Dance & Music (பரதநாட்டியம், கிராமிய நடனம் & பாட்டு)
+     4. Traditional Games & Fun for Kids & Adults (பாரம்பரிய விளையாட்டுகள்)
+   - **7 Dedicated Volunteer Teams:**
+     1. Food Department & Serving (உணவு தயாரிப்பு & பரிமாறுதல் பிரிவு)
+     2. Entertainment Team (கலை & பொழுதுபோக்குக் குழு)
+     3. Decoration Team (அரங்கு & மேடை அலங்காரக் குழு)
+     4. Photography & Video Team (புகைப்படம் & வீடியோ பிரிவு)
+     5. Video Editing (காணொளி தொகுப்பு & ரீல்ஸ்)
+     6. Anchoring / MC (மேடைத் தொகுத்து வழங்குதல்)
+     7. Cleaning Team (தூய்மை மற்றும் பராமரிப்புக் குழு)
 
 2. **Interactive Features:**
    - **Live Countdown Timer:** Counting down to Saturday, February 6, 2027 at 10:00 AM CET.
