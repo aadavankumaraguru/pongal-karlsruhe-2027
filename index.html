@@ -148,14 +148,8 @@
       <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-amber-100">
         <a href="#about" class="hover:text-amber-400 transition">About Pongal</a>
         <a href="#memories" class="hover:text-amber-400 transition">Memories 2026</a>
-        <a href="#register" class="hover:text-amber-400 transition">Registration</a>
-        <a href="#venue" class="hover:text-amber-400 transition">Venue & Travel</a>
+        <a href="#venue" class="hover:text-amber-400 transition">Venue & Transit</a>
         <a href="#contact" class="hover:text-amber-400 transition">Contact</a>
-        
-        <!-- Direct Registration CTA -->
-        <a href="https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-gold-festive px-4 py-2 rounded-full text-xs uppercase tracking-wider flex items-center gap-1.5 font-bold shadow-lg hover:scale-105 transition">
-          <span>📊 Register on Google Sheet ↗</span>
-        </a>
       </nav>
 
       <!-- Mobile Hamburger Button -->
@@ -199,16 +193,12 @@
       <nav class="flex flex-col gap-5 mt-8 text-lg font-medium">
         <a href="#about" class="mobile-nav-link text-amber-100 hover:text-amber-400">About Pongal • மரபு</a>
         <a href="#memories" class="mobile-nav-link text-amber-100 hover:text-amber-400">Memories 2026 • வீடியோ</a>
-        <a href="#register" class="mobile-nav-link text-amber-100 hover:text-amber-400">Registration • பதிவு</a>
         <a href="#venue" class="mobile-nav-link text-amber-100 hover:text-amber-400">Venue & Transit • இடம்</a>
         <a href="#contact" class="mobile-nav-link text-amber-100 hover:text-amber-400">Contact • தொடர்புக்கு</a>
       </nav>
     </div>
 
     <div class="pt-6 border-t border-amber-500/20 flex flex-col gap-3">
-      <a href="https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-gold-festive w-full py-3 rounded-xl text-center font-bold flex items-center justify-center gap-2">
-        <span>📊 Open Google Sheet to Register ↗</span>
-      </a>
       <button onclick="shareWhatsApp()" class="w-full py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-medium flex items-center justify-center gap-2 text-sm">
         <span>Share on WhatsApp</span>
       </button>
@@ -278,11 +268,19 @@
     <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-20">
       
       <!-- Top Badge / Traditional Greeting -->
-      <div class="inline-flex items-center gap-2 tradition-pill mb-6 shadow-md animate-bounce-subtle">
+      <div class="inline-flex items-center gap-2 tradition-pill mb-5 shadow-md animate-bounce-subtle">
         <span>🌾</span>
         <span class="font-tamil font-bold tracking-wide">தைப்பொங்கல் திருவிழா 2027</span>
         <span class="text-amber-400">•</span>
         <span>Karlsruhe Tamil Sangam</span>
+      </div>
+
+      <!-- Registration Button (Prominently at the top of Hero) -->
+      <div class="mb-5">
+        <a href="https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-gold-festive px-8 py-3.5 rounded-2xl text-base font-bold inline-flex items-center justify-center gap-2.5 shadow-2xl hover:scale-105 transition">
+          <span class="text-xl">📊</span>
+          <span>Register on Google Sheet / பெயர்களை பதிவு செய்க ↗</span>
+        </a>
       </div>
 
       <!-- Main Headline: PONGAL 2027 -->
@@ -587,21 +585,6 @@
         </div>
       </div>
 
-      <!-- PRIMARY CALL-TO-ACTION: DIRECT GOOGLE SPREADSHEET LINK -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-xl mx-auto">
-        <a href="https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-gold-festive w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-bold flex items-center justify-center gap-3 shadow-2xl group hover:scale-105 transition">
-          <span class="text-2xl">📊</span>
-          <div class="text-left">
-            <div class="leading-none text-xs uppercase tracking-wider text-amber-950 font-bold">Register on Google Sheet</div>
-            <div class="text-base font-extrabold text-maroon-950">பெயர்களை பதிவு செய்க ↗</div>
-          </div>
-        </a>
-      </div>
-
-      <!-- Subtext reassuring users -->
-      <p class="text-xs text-amber-300/80 mt-4">
-        👉 Please click the button above to add your name, family count, and details in the Google Sheet!
-      </p>
 
     </div>
   </section>
@@ -768,60 +751,21 @@
 
 
 
-  <!-- SECTION: GOOGLE SPREADSHEET REGISTRATION (கூகுள் விரிதாளில் பதிவு) -->
-  <section id="register" class="py-20 bg-festive-silk relative border-t border-b border-amber-500/20">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-      
-      <div class="tradition-pill mb-3">
-        <span>📊</span>
-        <span>கூகுள் விரிதாள் பதிவு • Google Sheet RSVP</span>
-      </div>
-      <h2 class="text-3xl sm:text-5xl font-bold font-serif text-gold-gradient mb-3">
-        Pongal 2027 Registration
-      </h2>
-      <p class="text-2xl sm:text-3xl font-tamil font-bold text-amber-300 mb-3">
-        பொங்கல் விழா முன்பதிவு
-      </p>
-      <p class="text-sm sm:text-base text-amber-100/90 max-w-xl mx-auto leading-relaxed mb-8">
-        We are organizing our community attendance through a shared Google Spreadsheet. Please click the button below to open the spreadsheet and add your family member details and guest counts directly.
-      </p>
-
-      <div class="bg-gradient-to-b from-maroon-900/90 to-maroon-950/90 rounded-3xl p-8 sm:p-10 border-2 border-amber-500/40 shadow-2xl max-w-xl mx-auto">
-        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl mx-auto mb-4 text-amber-300">
-          📝
-        </div>
-        <h3 class="text-xl font-bold font-serif text-white mb-2">Google Spreadsheet RSVP</h3>
-        <p class="text-xs text-amber-200/80 mb-6 leading-relaxed">
-          Click below to open the spreadsheet in a new tab. You can view the list and add your names and family headcounts.
-        </p>
-        
-        <a href="https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-gold-festive w-full py-4 px-6 rounded-xl text-base font-bold flex items-center justify-center gap-3 shadow-2xl hover:scale-105 transition">
-          <span class="text-xl">📊</span>
-          <span>Open Google Spreadsheet / பதிவு செய்க ↗</span>
-        </a>
-
-        <div class="mt-5 pt-4 border-t border-amber-500/20 text-[11px] text-amber-300/80">
-          Need help adding your name? Contact <strong class="text-white">KTS Support (+49 1622896004)</strong> directly!
-        </div>
-      </div>
-
-    </div>
-  </section>
 
   <!-- SECTION: VENUE & DIRECTIONS (இடம் மற்றும் போக்குவரத்து) -->
   <section id="venue" class="py-20 bg-maroon-950/70 border-t border-b border-amber-500/20 relative">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       
-      <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="text-center max-w-3xl mx-auto mb-12">
         <div class="tradition-pill mb-3">
-          <span>📍</span>
-          <span>இடம் • Venue & Directions</span>
+          <span>🚆</span>
+          <span>போக்குவரத்து வழிகாட்டி • Transit & Travel</span>
         </div>
         <h2 class="text-3xl sm:text-4xl font-bold font-serif text-gold-gradient mb-3">
-          Beethovenstraße 4, 76448 Durmersheim-Würmersheim
+          Transit & Directions
         </h2>
         <p class="text-amber-200/90 text-sm">
-          Conveniently located in the Karlsruhe metropolitan area with transit access, limited on-site parking, and street parking available.
+          Plan your journey by public transit or car to the celebration venue.
         </p>
       </div>
 
@@ -829,32 +773,6 @@
         
         <!-- Venue Info Details (5 cols) -->
         <div class="lg:col-span-5 space-y-6">
-          
-          <!-- Address Card -->
-          <div class="bg-festive-card p-6 rounded-2xl border border-amber-500/30">
-            <h3 class="text-xs uppercase font-bold tracking-wider text-amber-400 mb-1">Full Hall Address</h3>
-            <p class="text-xl font-bold text-white">Gemeindehalle / Bürgerhaus</p>
-            <p class="text-base text-amber-100 mt-1">
-              <a href="https://maps.google.com/?q=Beethovenstra%C3%9Fe+4,+76448+Durmersheim" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline underline-offset-2">
-                Beethovenstraße 4
-              </a>
-            </p>
-            <p class="text-base text-amber-200 font-semibold">
-              <a href="https://maps.google.com/?q=Beethovenstra%C3%9Fe+4,+76448+Durmersheim" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition">
-                76448 Durmersheim (OT Würmersheim)
-              </a>
-            </p>
-            <p class="text-xs text-amber-300/70 mt-2">Baden-Württemberg, Germany</p>
-            
-            <div class="mt-4 pt-4 border-t border-amber-500/20 flex flex-wrap gap-2">
-              <a href="https://maps.google.com/?q=Beethovenstra%C3%9Fe+4,+76448+Durmersheim" target="_blank" rel="noopener noreferrer" class="btn-gold-festive px-4 py-2 rounded-lg text-xs font-bold inline-flex items-center gap-1.5">
-                <span>🗺️ Google Maps</span>
-              </a>
-              <a href="https://maps.apple.com/?q=Beethovenstra%C3%9Fe+4,+76448+Durmersheim" target="_blank" rel="noopener noreferrer" class="btn-maroon-festive px-4 py-2 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5">
-                <span>🧭 Apple Maps</span>
-              </a>
-            </div>
-          </div>
 
           <!-- Transit Guide -->
           <div class="bg-festive-card p-6 rounded-2xl border border-amber-500/30 space-y-4">
@@ -996,12 +914,8 @@
         ஒன்றாய் இணைவோம் • பாரம்பரியம் போற்றுவோம் • மகிழ்ந்து கொண்டாடுவோம்!
       </p>
       <div class="flex flex-wrap justify-center gap-4">
-        <a href="https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-gold-festive px-8 py-4 rounded-xl font-extrabold text-base shadow-2xl transition hover:scale-105 flex items-center gap-2">
-          <span>📊</span>
-          <span>Register on Google Sheet ↗</span>
-        </a>
-        <button onclick="shareWhatsApp()" class="bg-emerald-800 text-white hover:bg-emerald-900 px-6 py-4 rounded-xl font-bold text-base shadow-xl transition flex items-center gap-2">
-          <span>Share on WhatsApp</span>
+        <button onclick="shareWhatsApp()" class="bg-emerald-800 text-white hover:bg-emerald-900 px-8 py-4 rounded-xl font-bold text-base shadow-xl transition flex items-center gap-2">
+          <span>💬 Share Event on WhatsApp</span>
         </button>
       </div>
     </div>
@@ -1048,7 +962,6 @@
           <ul class="space-y-2 text-xs text-amber-200">
             <li><a href="#about" class="hover:text-amber-400 transition">Heritage & Significance</a></li>
             <li><a href="#memories" class="hover:text-amber-400 transition">Pongal 2026 Video & Memories</a></li>
-            <li><a href="https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-amber-400 font-bold hover:underline">Register on Google Sheet ↗</a></li>
             <li><a href="#venue" class="hover:text-amber-400 transition">Venue Map & Directions</a></li>
             <li><a href="#contact" class="hover:text-amber-400 transition">Contact</a></li>
           </ul>
