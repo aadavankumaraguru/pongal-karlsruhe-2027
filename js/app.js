@@ -8,10 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initPetalsCanvas();
   initMobileMenu();
   initCalendarGenerator();
-  initFaqAccordion();
   initSmoothScroll();
   initInteractivePot();
-  initRegistrationForm();
 });
 
 /* -------------------------------------------------------------
@@ -217,40 +215,6 @@ function initCalendarGenerator() {
 }
 
 /* -------------------------------------------------------------
- * 4. FAQ ACCORDION
- * ----------------------------------------------------------- */
-function initFaqAccordion() {
-  const toggles = document.querySelectorAll('.faq-toggle');
-
-  toggles.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-      const content = btn.nextElementSibling;
-      const icon = btn.querySelector('.faq-icon');
-
-      toggles.forEach((otherBtn) => {
-        if (otherBtn !== btn) {
-          otherBtn.setAttribute('aria-expanded', 'false');
-          if (otherBtn.nextElementSibling) {
-            otherBtn.nextElementSibling.classList.add('hidden');
-          }
-          const otherIcon = otherBtn.querySelector('.faq-icon');
-          if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
-        }
-      });
-
-      btn.setAttribute('aria-expanded', !isExpanded);
-      if (content) {
-        content.classList.toggle('hidden', isExpanded);
-      }
-      if (icon) {
-        icon.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(180deg)';
-      }
-    });
-  });
-}
-
-/* -------------------------------------------------------------
  * 5. MOBILE NAVIGATION MENU
  * ----------------------------------------------------------- */
 function initMobileMenu() {
@@ -306,11 +270,13 @@ function initSmoothScroll() {
 /* -------------------------------------------------------------
  * 7. SHARE & COPY EVENT FUNCTIONS
  * ----------------------------------------------------------- */
+const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1yyDVn4tWpFR0QwoZpiqSF2hNMdnE9YBdH0jOhtTd7BQ/edit?usp=sharing';
+
 window.shareWhatsApp = function () {
   const message = '🌾 Vanakkam Makkale! Pongal 2027 Celebration in Karlsruhe Region! 🌾\n\n' +
     '📅 Date: Saturday, 06 February 2027\n' +
     '📍 Venue: Beethovenstraße 4, 76448 Durmersheim-Würmersheim\n' +
-    '📝 Register & Volunteer Online: ' + window.location.href + '#register-form-section\n\n' +
+    '📊 Register on Google Sheet: ' + SPREADSHEET_URL + '\n\n' +
     'Karlsruhe Tamil Sangam';
   window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
 };
@@ -319,12 +285,12 @@ window.copyEventLink = function () {
   const text = '🌟 Tamil Pongal 2027 - Karlsruhe Tamil Sangam\n' +
     '📅 Saturday, 06 February 2027\n' +
     '📍 Beethovenstraße 4, 76448 Durmersheim-Würmersheim\n' +
-    '📝 Register Online: ' + window.location.href + '#register-form-section';
+    '📊 Register on Google Sheet: ' + SPREADSHEET_URL;
 
   navigator.clipboard.writeText(text).then(() => {
-    showToast('✅ Event info & link copied to clipboard!');
+    showToast('✅ Event info & spreadsheet link copied to clipboard!');
   }).catch(() => {
-    showToast('Link: ' + window.location.href);
+    showToast('Spreadsheet Link: ' + SPREADSHEET_URL);
   });
 };
 
@@ -351,28 +317,7 @@ function showToast(message) {
 }
 
 /* -------------------------------------------------------------
- * 9. SPREADSHEET MODAL / VOLUNTEER ASSISTANT
- * ----------------------------------------------------------- */
-window.openSpreadsheetModal = function (roleType = '') {
-  const modal = document.getElementById('spreadsheet-guide-modal');
-  if (!modal) return;
-  const roleSpan = document.getElementById('modal-suggested-role');
-  if (roleSpan) {
-    roleSpan.innerText = roleType ? `Selected Role: ${roleType}` : '';
-  }
-  modal.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-};
-
-window.closeSpreadsheetModal = function () {
-  const modal = document.getElementById('spreadsheet-guide-modal');
-  if (!modal) return;
-  modal.classList.add('hidden');
-  document.body.style.overflow = '';
-};
-
-/* -------------------------------------------------------------
- * 10. INTERACTIVE PONGAL POT ANIMATION CLICK
+ * 9. INTERACTIVE PONGAL POT ANIMATION CLICK
  * ----------------------------------------------------------- */
 function initInteractivePot() {
   const pot = document.getElementById('pongal-hero-interactive');
@@ -386,93 +331,3 @@ function initInteractivePot() {
     }, 350);
   });
 }
-
-/* -------------------------------------------------------------
- * 11. ONLINE REGISTRATION & VOLUNTEER FORM HANDLER
- * ----------------------------------------------------------- */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyDjeJcuFze4WLNNCCoQ1JuGhX2AmJuJLzsIDfoAXiWEs8E5quwj_QUKbIRE8o8AiDx/exec';
-
-function initRegistrationForm() {
-  const form = document.getElementById('pongal-registration-form');
-  if (!form) return;
-
-  const submitBtn = document.getElementById('form-submit-btn');
-  const btnIcon = document.getElementById('btn-icon');
-  const btnText = document.getElementById('btn-text');
-  const btnSpinner = document.getElementById('btn-spinner');
-  const successBanner = document.getElementById('form-success-banner');
-  const errorBanner = document.getElementById('form-error-banner');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const checkedTeams = [];
-    document.querySelectorAll('input[name="volunteer-team"]:checked').forEach((cb) => {
-      checkedTeams.push(cb.value);
-    });
-
-    const formData = {
-      participants: document.getElementById('form-participants')?.value?.trim() || '',
-      adults: document.getElementById('form-adults')?.value || '1',
-      kidsUnder5: document.getElementById('form-kids-under5')?.value || '0',
-      kids5to15: document.getElementById('form-kids-5to15')?.value || '0',
-      kidsNamesAges: document.getElementById('form-kids-names')?.value?.trim() || '',
-      isStudent: document.getElementById('form-student')?.value || 'No',
-      contactNumber: document.getElementById('form-contact')?.value?.trim() || '',
-      volunteerTeams: checkedTeams.join(', ')
-    };
-
-    if (submitBtn) submitBtn.disabled = true;
-    if (btnIcon) btnIcon.classList.add('hidden');
-    if (btnSpinner) btnSpinner.classList.remove('hidden');
-    if (btnText) btnText.textContent = 'Saving to Sheet... • பதிவு செய்யப்படுகிறது...';
-    if (errorBanner) errorBanner.classList.add('hidden');
-
-    try {
-      // Send single clean URL-encoded POST request
-      const params = new URLSearchParams();
-      for (const key in formData) {
-        params.append(key, formData[key]);
-      }
-
-      await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: params.toString()
-      });
-
-      if (successBanner) {
-        successBanner.classList.remove('hidden');
-        successBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-      form.classList.add('hidden');
-      showToast('🎉 உங்கள் பதிவு வெற்றிகரமாக சேர்க்கப்பட்டது! (Registration Saved)');
-    } catch (err) {
-      console.error('Registration submit error:', err);
-      if (errorBanner) {
-        errorBanner.classList.remove('hidden');
-      }
-      showToast('⚠️ Registration failed. Please check internet or try again.');
-    } finally {
-      if (submitBtn) submitBtn.disabled = false;
-      if (btnIcon) btnIcon.classList.remove('hidden');
-      if (btnSpinner) btnSpinner.classList.add('hidden');
-      if (btnText) btnText.textContent = 'Submit Registration • பதிவு செய்க';
-    }
-  });
-}
-
-window.resetPongalForm = function() {
-  const form = document.getElementById('pongal-registration-form');
-  const successBanner = document.getElementById('form-success-banner');
-  const errorBanner = document.getElementById('form-error-banner');
-  if (form) {
-    form.reset();
-    form.classList.remove('hidden');
-  }
-  if (successBanner) successBanner.classList.add('hidden');
-  if (errorBanner) errorBanner.classList.add('hidden');
-};
